@@ -9,10 +9,13 @@ public:
     MOCK_METHOD(void, write, (long address, unsigned char data), (override));
 };
 
-TEST(TS, TC4) {
+class DD_fixture : public Test {
+public:
     NiceMock<FlashMock> mockHW;
     DeviceDriver dd{ &mockHW };
+};
 
+TEST_F(DD_fixture, TC4) {
     EXPECT_CALL(mockHW, read((long)0xA))
         .Times(1)
         .WillOnce(Return(0xFA));
@@ -21,10 +24,7 @@ TEST(TS, TC4) {
         std::exception);
 }
 
-TEST(TS, TC3) {
-    NiceMock<FlashMock> mockHW;
-    DeviceDriver dd{ &mockHW };
-
+TEST_F(DD_fixture, TC3) {
     EXPECT_CALL(mockHW, read((long)0xA))
         .Times(1)
         .WillOnce(Return(0xFF));
@@ -32,10 +32,7 @@ TEST(TS, TC3) {
     dd.write((long)0xA, 0x33);
 }
 
-TEST(TS, TC2) {
-    FlashMock mockHW;
-    DeviceDriver dd{ &mockHW };
-
+TEST_F(DD_fixture, TC2) {
     EXPECT_CALL(mockHW, read((long)0xA))
         .WillOnce(Return((int)0xDD))
         .WillOnce(Return((int)0xDD))
@@ -46,16 +43,14 @@ TEST(TS, TC2) {
     EXPECT_THROW(dd.read(0xA), std::exception);
 }
 
-TEST(TS, TC1) {
-    FlashMock mockHW;
-    DeviceDriver dd{ &mockHW }; //mock injection
-
+TEST_F(DD_fixture, TC1) {
     EXPECT_CALL(mockHW, read((long)0xA))
         .Times(5)
         .WillRepeatedly(Return((int)0x77));
 
     int result = dd.read(0xA);
 }
+
 
 int main() {
     ::testing::InitGoogleMock();
