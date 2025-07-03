@@ -8,6 +8,7 @@ public:
     int read(long address);
     void write(long address, int data);
 
+    void postConditionCheck(int ret, long address);
 protected:
     FlashMemoryDevice* m_hardware;
 }; 

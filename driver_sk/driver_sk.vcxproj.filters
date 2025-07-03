@@ -24,8 +24,8 @@
     <ClCompile Include="device_driver.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MockFlash.cpp">
-      <Filter>테스트파일</Filter>
+    <ClCompile Include="app.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
