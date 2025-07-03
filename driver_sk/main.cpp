@@ -9,6 +9,29 @@ public:
     MOCK_METHOD(void, write, (long address, unsigned char data), (override));
 };
 
+TEST(TS, TC4) {
+    NiceMock<FlashMock> mockHW;
+    DeviceDriver dd{ &mockHW };
+
+    EXPECT_CALL(mockHW, read((long)0xA))
+        .Times(1)
+        .WillOnce(Return(0xFA));
+
+    EXPECT_THROW(dd.write((long)0xA, 0x33),
+        std::exception);
+}
+
+TEST(TS, TC3) {
+    NiceMock<FlashMock> mockHW;
+    DeviceDriver dd{ &mockHW };
+
+    EXPECT_CALL(mockHW, read((long)0xA))
+        .Times(1)
+        .WillOnce(Return(0xFF));
+
+    dd.write((long)0xA, 0x33);
+}
+
 TEST(TS, TC2) {
     FlashMock mockHW;
     DeviceDriver dd{ &mockHW };
